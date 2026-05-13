@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>استبيان تقييم نظام التذاكر</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- مكتبة إظهار الأرقام داخل الرسوم البيانية -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -100,6 +103,15 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #7A2128; border-radius: 10px; }
+        
+        /* تأثيرات رسالة الخطأ المنبثقة */
+        .toast-enter {
+            animation: slideInDown 0.3s ease-out forwards;
+        }
+        @keyframes slideInDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -112,14 +124,29 @@
                 </div>
                 <div>
                     <h1 class="text-sm md:text-lg font-bold">استبيان تقييم نظام التذاكر</h1>
+                    <p class="text-[10px] md:text-xs text-gray-200">إدارة تقنية المعلومات (IT Helpdesk)</p>
                 </div>
             </div>
-            <button onclick="showAdminLogin()" class="bg-white/20 hover:bg-white/40 text-white rounded-xl px-4 py-2 transition shadow-sm border border-white/30 flex items-center gap-2" title="دخول المشرف">
-                <span class="text-sm font-bold hidden md:block">الداشبورد</span>
-                <i class="fas fa-cog text-xl md:text-2xl"></i>
+            <!-- زر الدخول للوحة المشرف أصبح بارزاً وواضحاً جداً -->
+            <button onclick="showAdminLogin()" class="bg-white/20 hover:bg-white/40 border border-white/30 text-white rounded-xl p-2 md:px-4 md:py-2 transition shadow-sm flex items-center gap-2" title="لوحة المشرف">
+                <i class="fas fa-cog text-xl"></i>
             </button>
         </div>
     </header>
+
+    <!-- رسالة الخطأ المنبثقة (Pop-up Toast) -->
+    <div id="validationToast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 hidden toast-enter w-[90%] max-w-sm">
+        <div class="bg-white border-l-4 border-red-500 rounded-lg shadow-xl p-4 flex items-start gap-3">
+            <i class="fas fa-exclamation-circle text-red-500 text-xl mt-0.5"></i>
+            <div>
+                <h4 class="text-red-800 font-bold text-sm">بيانات غير مكتملة!</h4>
+                <p id="toastMessage" class="text-gray-600 text-xs mt-1">الرجاء إكمال جميع الحقول المطلوبة.</p>
+            </div>
+            <button onclick="hideToast()" class="ml-auto text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <div id="adminModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl border-t-4 border-[#7A2128]">
@@ -150,32 +177,32 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-xs font-bold mb-2 text-gray-700">الإدارة / الفرع *</label>
-                                    <input type="text" id="empDepartment" required class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#7A2128] outline-none">
+                                    <input type="text" id="empDepartment" class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#7A2128] outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold mb-2 text-gray-700">المسمى الوظيفي *</label>
-                                    <input type="text" id="empJobTitle" required class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#7A2128] outline-none">
+                                    <input type="text" id="empJobTitle" class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#7A2128] outline-none">
                                 </div>
                             </div>
                         </div>
 
                         <div class="border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
-                            <label class="block font-bold text-sm md:text-base mb-4 text-gray-800">1. ما مدى سهولة استخدام نظام التذاكر لرفع طلباتك ومتابعتها؟</label>
+                            <label class="block font-bold text-sm md:text-base mb-4 text-gray-800">1. ما مدى سهولة استخدام نظام التذاكر لرفع طلباتك ومتابعتها؟ *</label>
                             <div class="impact-slider mb-2 mt-4" id="slider1"><div class="slider-track"></div><div class="slider-fill" id="fill1"></div><div class="slider-knob" id="knob1"></div></div>
-                            <input type="hidden" id="q1_rating" required>
+                            <input type="hidden" id="q1_rating">
                         </div>
 
                         <div class="border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
-                            <label class="block font-bold text-sm md:text-base mb-4 text-gray-800">2. كيف تقيم سرعة استجابة فريق الدعم لمعالجة تذكرتك بعد رفعها؟</label>
+                            <label class="block font-bold text-sm md:text-base mb-4 text-gray-800">2. كيف تقيم سرعة استجابة فريق الدعم لمعالجة تذكرتك بعد رفعها؟ *</label>
                             <div class="impact-slider mb-2 mt-4" id="slider2"><div class="slider-track"></div><div class="slider-fill" id="fill2"></div><div class="slider-knob" id="knob2"></div></div>
-                            <input type="hidden" id="q2_rating" required>
+                            <input type="hidden" id="q2_rating">
                         </div>
 
                         <div class="border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
-                            <label class="block font-bold text-sm md:text-base mb-5 text-gray-800">3. عند إغلاق التذكرة، هل يتم حل المشكلة بشكل جذري أم تضطر لفتح تذكرة أخرى؟</label>
+                            <label class="block font-bold text-sm md:text-base mb-5 text-gray-800">3. عند إغلاق التذكرة، هل يتم حل المشكلة بشكل جذري أم تضطر لفتح تذكرة أخرى؟ *</label>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <label class="impact-option p-4 border rounded-xl text-center cursor-pointer flex flex-col items-center justify-center">
-                                    <input type="radio" name="fcrStatus" value="تُحل جذرياً من المرة الأولى" class="hidden" required> 
+                                    <input type="radio" name="fcrStatus" value="تُحل جذرياً من المرة الأولى" class="hidden"> 
                                     <i class="fas fa-check-circle text-2xl mb-3 text-green-600 group-hover:text-white"></i><span class="text-xs font-bold">تُحل جذرياً من المرة الأولى</span>
                                 </label>
                                 <label class="impact-option p-4 border rounded-xl text-center cursor-pointer flex flex-col items-center justify-center">
@@ -194,7 +221,7 @@
                             <textarea id="suggestions" class="w-full px-4 py-3 border rounded-xl text-sm focus:ring-2 focus:ring-[#7A2128] outline-none resize-none" rows="3" placeholder="اكتب مقترحك أو ملاحظاتك هنا..."></textarea>
                         </div>
 
-                        <button id="submitSurveyBtn" type="submit" class="w-full bg-[#7A2128] hover:bg-red-900 text-white font-bold py-4 rounded-xl shadow-lg text-base transition-all flex justify-center items-center gap-2">
+                        <button id="submitSurveyBtn" type="button" onclick="submitSurvey()" class="w-full bg-[#7A2128] hover:bg-red-900 text-white font-bold py-4 rounded-xl shadow-lg text-base transition-all flex justify-center items-center gap-2">
                             <i class="fas fa-paper-plane"></i> إرسال التقييم
                         </button>
                     </form>
@@ -265,20 +292,23 @@
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
+        // تسجيل الإضافة للأرقام لكي تظهر على الرسوم البيانية
+        Chart.register(ChartDataLabels);
+
         // ==================== الإعدادات والرابط ====================
         const CONFIG = {
             ADMIN_PASSWORD: "KIB_ADMIN_2026",
-            STORAGE_KEY: "KIB_TICKET_SURVEY_V2", 
+            STORAGE_KEY: "KIB_TICKET_SURVEY_V4", 
             
             // ضـع الـرابـط الجـديـد بـيـن عـلامـات التـنـصـيـص أسـفـل هـذا السـطـر
-            GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwLDCyR7KaEEKNzy8PktVopMokL2B0YnLlSdnFjhS2c1z9vXZ0KNIhXoRCzeblbotOG/exec" 
+            GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbye1nC2zN-0NfMnd8O7X28qM7K8y5E7qU-4Kk5L8_8/exec" 
         };
 
         let surveyData = [];
         let charts = {};
+        let toastTimeout;
 
         // فحص المتصفح لمنع التكرار وتهيئة الصفحة
         document.addEventListener("DOMContentLoaded", () => {
@@ -402,26 +432,41 @@
             }
         });
 
-        // ==================== إرسال الاستبيان ====================
-        document.getElementById('surveyForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        // ==================== دوال رسالة الخطأ (Toast) ====================
+        function showToast(message) {
+            const toast = document.getElementById('validationToast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('hidden');
             
-            const btn = document.querySelector('#surveyForm button[type="submit"]');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                hideToast();
+            }, 4000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('validationToast');
+            toast.classList.add('hidden');
+        }
+
+        // ==================== إرسال الاستبيان ====================
+        async function submitSurvey() {
+            
+            const dept = document.getElementById('empDepartment').value.trim();
+            const job = document.getElementById('empJobTitle').value.trim();
             const q1 = document.getElementById('q1_rating').value;
             const q2 = document.getElementById('q2_rating').value;
             const fcrStatus = document.querySelector('input[name="fcrStatus"]:checked')?.value;
+            const btn = document.getElementById('submitSurveyBtn');
             
-            if (!q1 || !q2) { 
-                alert('الرجاء تحريك المؤشر للتقييم على السؤال الأول والثاني.'); 
-                return; 
-            }
-            if (!fcrStatus) { 
-                alert('الرجاء الإجابة على السؤال الثالث.'); 
-                return; 
-            }
+            if (!dept) { showToast('يرجى إدخال اسم الإدارة أو الفرع.'); document.getElementById('empDepartment').focus(); return; }
+            if (!job) { showToast('يرجى إدخال مسماك الوظيفي.'); document.getElementById('empJobTitle').focus(); return; }
+            if (!q1) { showToast('الرجاء تقييم السؤال الأول عن طريق سحب المؤشر.'); return; }
+            if (!q2) { showToast('الرجاء تقييم السؤال الثاني عن طريق سحب المؤشر.'); return; }
+            if (!fcrStatus) { showToast('الرجاء الإجابة على السؤال الثالث باختيار أحد الخيارات.'); return; }
             
-            if(CONFIG.GOOGLE_SCRIPT_URL.includes("ضع_الرابط")) {
-                alert("لم تقم بإضافة رابط Google Script في الكود بعد!");
+            if(CONFIG.GOOGLE_SCRIPT_URL.includes("ضع_الرابط") || CONFIG.GOOGLE_SCRIPT_URL === "") {
+                showToast("لم تقم بإضافة رابط Google Script في الكود بعد!");
                 return;
             }
 
@@ -430,8 +475,8 @@
 
             const payload = {
                 timestamp: new Date().toLocaleString('ar-SA'),
-                department: document.getElementById('empDepartment').value,
-                jobTitle: document.getElementById('empJobTitle').value,
+                department: dept,
+                jobTitle: job,
                 systemUsability: parseInt(q1),
                 responseSpeed: parseInt(q2),
                 fcrStatus: fcrStatus,
@@ -447,16 +492,16 @@
                 document.getElementById('surveyContainer').classList.add('hidden');
                 document.getElementById('thankYouMessage').classList.remove('hidden');
             } catch (error) {
-                alert('حدث خطأ أثناء الإرسال، تأكد من اتصالك بالإنترنت.');
+                showToast('حدث خطأ أثناء الإرسال، تأكد من اتصالك بالإنترنت.');
                 btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال التقييم';
                 btn.disabled = false;
             }
-        });
+        }
 
         // ==================== لوحة التحكم وجلب البيانات ====================
         async function loadDashboardData() {
             try {
-                if(CONFIG.GOOGLE_SCRIPT_URL.includes("ضع_الرابط")) {
+                if(CONFIG.GOOGLE_SCRIPT_URL.includes("ضع_الرابط") || CONFIG.GOOGLE_SCRIPT_URL === "") {
                     throw new Error("لم يتم وضع الرابط بعد");
                 }
                 document.getElementById('responsesTableBody').innerHTML = '<tr><td colspan="7" class="text-center p-8 text-gray-500 font-bold">جاري جلب البيانات من السيرفر... <i class="fas fa-spinner fa-spin mr-2"></i></td></tr>';
@@ -520,7 +565,24 @@
                         borderRadius: 4
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#7A2128',
+                            anchor: 'end',
+                            align: 'end',
+                            offset: 4,
+                            font: { family: 'Cairo', weight: 'bold' },
+                            formatter: function(value) { return value > 0 ? value : ''; }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, suggestedMax: Math.max(...Object.values(ratingsRanges)) + 2 }
+                    }
+                }
             });
             
             const fcrCounts = { 'حل جذري': 0, 'حل مؤقت': 0, 'بدون حل': 0 };
@@ -534,9 +596,38 @@
                 type: 'doughnut',
                 data: {
                     labels: ['تُحل جذرياً', 'تُحل مؤقتاً', 'إغلاق بدون حل'],
-                    datasets: [{ data: Object.values(fcrCounts), backgroundColor: ['#10B981', '#F5B335', '#EF4444'], borderWidth: 0 }]
+                    datasets: [{ 
+                        data: Object.values(fcrCounts), 
+                        backgroundColor: ['#10B981', '#F5B335', '#EF4444'], 
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    layout: { padding: 15 },
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { font: { family: 'Cairo', weight: 'bold' } } },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: { size: 16, weight: '900', family: 'Cairo' },
+                            textShadowBlur: 4,
+                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            anchor: 'center',
+                            align: 'center',
+                            formatter: function(value, ctx) { 
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data => { sum += data; });
+                                if(value === 0) return '';
+                                let percentage = (value * 100 / sum).toFixed(0) + "%";
+                                return percentage;
+                            }
+                        }
+                    },
+                    cutout: '55%'
+                }
             });
         }
 
