@@ -357,7 +357,7 @@
     </main>
 
     <script>
-        const GOOGLE_SCRIPT_URL = 'ضع_رابط_جوجل_سكربت_هنا';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTyWfsPwWPTtEWVLfuImkGU4jiAYXVRreOMZuprCqKJ779cXXd1k-8B-_t8IUYOyGNVQ/exec';
 
         let currentTab = 0;
         const formSteps = document.querySelectorAll('.form-step');
@@ -453,11 +453,6 @@
 
         async function submitSurvey() {
             if (!validateForm()) return;
-            
-            if(GOOGLE_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyTyWfsPwWPTtEWVLfuImkGU4jiAYXVRreOMZuprCqKJ779cXXd1k-8B-_t8IUYOyGNVQ/exec'){
-                alert("يرجى وضع رابط Google Script في الكود أولاً.");
-                return;
-            }
 
             const btn = document.getElementById('submitBtn');
             btn.innerText = "جاري الإرسال...";
