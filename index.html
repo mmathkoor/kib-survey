@@ -4,79 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>استبيان جودة الخدمات التجارية</title>
+    <!-- مكتبة Tailwind للتصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- تم تغيير سيرفر الأيقونات إلى jsdelivr لضمان عمله في جميع الشبكات -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
         * { font-family: 'Cairo', sans-serif; }
-        :root { --primary: #7A2128; --primary-dark: #5a181d; --secondary: #C5A059; --bg-color: #F8F9FA; --border-color: #E5E7EB; }
-        body { background-color: var(--bg-color); color: #1F2937; }
+        :root { 
+            --primary: #7A2128; 
+            --primary-dark: #5a181d; 
+            --secondary: #C5A059; 
+            --bg-color: #F4F6F8; 
+            --border-color: #E2E8F0; 
+        }
+        body { background-color: var(--bg-color); color: #1E293B; }
 
-        .progress-container { width: 100%; background-color: #E5E7EB; border-radius: 999px; height: 6px; overflow: hidden; }
-        .progress-bar { height: 100%; background-color: var(--secondary); transition: width 0.4s ease; }
+        .progress-container { width: 100%; background-color: #E2E8F0; border-radius: 999px; height: 8px; overflow: hidden; }
+        .progress-bar { height: 100%; background-color: var(--secondary); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        .formal-choice { transition: all 0.2s ease; border: 1px solid var(--border-color); background: white; padding: 1rem; border-radius: 0.5rem; cursor: pointer; display: flex; align-items: flex-start; gap: 0.75rem; }
-        .formal-choice:hover { border-color: var(--secondary); background-color: #fdfaf3; }
-        .formal-choice input { margin-top: 0.25rem; accent-color: var(--primary); width: 1.1rem; height: 1.1rem; cursor: pointer; }
-        .formal-choice:has(input:checked) { border-color: var(--primary); background-color: #faf5f5; box-shadow: 0 2px 8px rgba(122, 33, 40, 0.05); }
-        .formal-choice-text { font-size: 0.9rem; font-weight: 600; color: #374151; line-height: 1.5; }
-        .formal-choice:has(input:checked) .formal-choice-text { color: var(--primary); font-weight: 700; }
+        .formal-choice { transition: all 0.2s ease; border: 2px solid var(--border-color); background: white; padding: 1.25rem; border-radius: 0.75rem; cursor: pointer; display: flex; align-items: flex-start; gap: 0.75rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .formal-choice:hover { border-color: var(--secondary); background-color: #fdfaf3; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .formal-choice input { margin-top: 0.25rem; accent-color: var(--primary); width: 1.25rem; height: 1.25rem; cursor: pointer; flex-shrink: 0; }
+        .formal-choice:has(input:checked) { border-color: var(--primary); background-color: #fbf7f7; box-shadow: 0 4px 12px rgba(122, 33, 40, 0.08); }
+        .formal-choice-text { font-size: 0.95rem; font-weight: 700; color: #334155; line-height: 1.5; }
+        .formal-choice:has(input:checked) .formal-choice-text { color: var(--primary); font-weight: 800; }
 
-        .rating-grid { display: flex; flex-wrap: wrap; gap: 0.25rem; }
-        .rating-box { flex: 1; min-width: 30px; }
-        .rating-box div { transition: all 0.2s ease; background: white; border: 1px solid var(--border-color); text-align: center; padding: 0.5rem 0; font-weight: 700; color: #6B7280; border-radius: 0.25rem; cursor: pointer; font-size: 0.9rem; }
-        .rating-box:hover div { border-color: var(--secondary); background: #fdfaf3; }
-        .rating-box input:checked + div { background-color: var(--primary); color: white; border-color: var(--primary); }
+        .rating-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .rating-box { flex: 1; min-width: 35px; }
+        .rating-box div { transition: all 0.2s ease; background: white; border: 2px solid var(--border-color); text-align: center; padding: 0.75rem 0; font-weight: 800; color: #64748B; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .rating-box:hover div { border-color: var(--secondary); background: #fdfaf3; transform: translateY(-2px); }
+        .rating-box input:checked + div { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-color: var(--primary-dark); box-shadow: 0 4px 10px rgba(122, 33, 40, 0.3); transform: translateY(-2px); }
 
-        .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 0.5rem; background: white; font-size: 0.95rem; font-weight: 600; color: #1F2937; transition: border-color 0.2s; outline: none; }
-        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(122, 33, 40, 0.1); }
-        .form-label { display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; color: #1F2937; }
+        .form-input { width: 100%; padding: 0.875rem 1rem; border: 2px solid var(--border-color); border-radius: 0.5rem; background: white; font-size: 0.95rem; font-weight: 600; color: #1E293B; transition: all 0.2s; outline: none; }
+        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(122, 33, 40, 0.1); }
+        .form-label { display: block; font-weight: 800; font-size: 1rem; margin-bottom: 0.75rem; color: #0F172A; }
         
-        .form-step { display: none; animation: fadeIn 0.4s ease; }
+        .form-step { display: none; animation: fadeIn 0.4s ease forwards; opacity: 0; transform: translateY(10px); }
         .form-step.active { display: block; }
         .question-block { animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
 
-        .btn-primary { background-color: var(--primary); color: white; transition: background-color 0.2s; }
-        .btn-primary:hover { background-color: var(--primary-dark); }
-        .btn-secondary { background-color: white; border: 1px solid var(--border-color); color: #4B5563; transition: all 0.2s; }
-        .btn-secondary:hover { background-color: #F3F4F6; border-color: #D1D5DB; }
+        .btn-primary { background: linear-gradient(to bottom, var(--primary), var(--primary-dark)); color: white; transition: all 0.2s; box-shadow: 0 4px 6px rgba(122,33,40,0.2); border: none; }
+        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(122,33,40,0.3); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        textarea::-webkit-scrollbar { width: 6px; }
+        textarea::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb:hover { background: var(--secondary); }
     </style>
 </head>
-<body class="antialiased selection:bg-[#7A2128] selection:text-white">
+<body class="antialiased selection:bg-[#7A2128] selection:text-white pb-12">
 
     <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <div class="container mx-auto max-w-5xl flex justify-between items-center px-4 py-3">
+        <div class="container mx-auto max-w-4xl flex justify-between items-center px-4 py-3 md:py-4">
             <div class="flex items-center gap-4">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUIEjuNeKPxjlno3TAiyi8ChJaeKSS4XcbqC_8IPoHXa5SImOeE6YlKEs&s=10" alt="Bank Logo" class="h-10 md:h-12 object-contain border-l border-gray-200 pl-4">
                 <div>
-                    <h1 class="text-sm md:text-base font-bold text-gray-900">قطاع الشركات والتجارة الدولية</h1>
-                    <p class="text-xs text-gray-500 font-semibold mt-0.5">دراسة تقييم الخدمات التجارية</p>
+                    <h1 class="text-sm md:text-lg font-black text-gray-900">قطاع الشركات والتجارة الدولية</h1>
+                    <p class="text-xs md:text-sm text-gray-500 font-bold mt-0.5">دراسة تقييم الخدمات التجارية</p>
                 </div>
             </div>
         </div>
     </header>
 
-    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 hidden w-[90%] max-w-md transition-opacity duration-300">
-        <div class="bg-red-50 border-r-4 border-red-700 text-red-800 p-4 rounded shadow-md border-l border-y border-red-100 flex items-center justify-between">
-            <div class="text-sm font-bold" id="toastMessage">يرجى استكمال الحقول الإلزامية.</div>
-            <button onclick="document.getElementById('toast').classList.add('hidden')" class="text-red-800 hover:text-red-900 font-bold">&times;</button>
+    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 hidden w-[90%] max-w-md transition-all duration-300 shadow-2xl">
+        <div class="bg-red-50 border-r-4 border-red-700 text-red-800 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-exclamation-circle text-red-700 text-xl"></i>
+            <div class="flex-1">
+                <h4 class="font-bold text-sm">تنبيه</h4>
+                <div class="text-sm font-semibold mt-1" id="toastMessage">يرجى استكمال الحقول الإلزامية.</div>
+            </div>
+            <button onclick="document.getElementById('toast').classList.add('hidden')" class="text-red-800 hover:text-red-900 font-bold p-1"><i class="fas fa-times"></i></button>
         </div>
     </div>
 
-    <main class="container mx-auto max-w-4xl p-4 md:p-8 my-2">
-        <div id="surveyContainer" class="bg-white rounded border border-gray-200 shadow-sm overflow-hidden">
+    <main class="container mx-auto max-w-3xl p-4 md:p-6 mt-6">
+        <div id="surveyContainer" class="bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
             
-            <div class="bg-gray-50 p-6 md:p-8 border-b border-gray-200 text-center">
-                <h2 class="text-xl md:text-2xl font-black text-[var(--primary)] mb-3">دراسة جودة وتنافسية الخدمات التجارية</h2>
-                <p class="text-sm text-gray-600 leading-relaxed max-w-2xl mx-auto font-semibold">
-                    نهدف لتقييم كفاءة عمليات التجارة الدولية المقدمة لمؤسستكم، لمواءمة خدماتنا مع متطلباتكم الاستراتيجية.
+            <div class="bg-slate-50 p-6 md:p-8 border-b border-gray-200 text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-[var(--secondary)] to-[var(--primary)]"></div>
+                <h2 class="text-xl md:text-3xl font-black text-[var(--primary)] mb-3">تقييم جودة وتنافسية الخدمات التجارية</h2>
+                <p class="text-sm md:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto font-bold">
+                    نسعى من خلال هذه الدراسة لفهم احتياجاتكم بعمق، وقياس كفاءة عملياتنا مقارنة بالسوق لضمان تقديم أعلى معايير الخدمة لمؤسستكم.
                 </p>
                 
-                <div class="mt-8 max-w-lg mx-auto">
-                    <div class="flex justify-between text-xs font-bold text-gray-500 mb-2">
-                        <span>التقدم</span>
-                        <span id="progressText">33%</span>
+                <div class="mt-8 max-w-lg mx-auto bg-white p-3 rounded-lg shadow-sm border border-slate-100">
+                    <div class="flex justify-between text-xs font-bold text-slate-500 mb-2 px-1">
+                        <span>مستوى التقدم</span>
+                        <span id="progressText" class="text-[var(--primary)]">33%</span>
                     </div>
                     <div class="progress-container">
                         <div class="progress-bar" id="progressBar" style="width: 33%;"></div>
@@ -86,20 +104,21 @@
 
             <form id="surveyForm" class="p-6 md:p-10">
                 
-                <!-- الصفحة الأولى -->
+                <!-- القسم الأول: البيانات -->
                 <div class="form-step active" id="step1">
-                    <div class="border-b border-gray-200 pb-4 mb-6">
-                        <h3 class="text-lg font-bold text-gray-900">القسم الأول: البيانات والخدمات المستخدمة</h3>
+                    <div class="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-8">
+                        <div class="bg-[var(--primary)] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+                        <h3 class="text-xl font-black text-slate-800">بيانات المؤسسة والخدمات</h3>
                     </div>
 
-                    <div class="space-y-6">
+                    <div class="space-y-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="form-label">اسم الشركة / المؤسسة *</label>
-                                <input type="text" id="companyName" name="companyName" class="form-input" required>
+                                <label class="form-label">اسم الشركة / المؤسسة <span class="text-red-500">*</span></label>
+                                <input type="text" id="companyName" name="companyName" class="form-input" placeholder="أدخل اسم المؤسسة" required>
                             </div>
                             <div>
-                                <label class="form-label">القطاع التجاري الأساسي *</label>
+                                <label class="form-label">القطاع التجاري الأساسي <span class="text-red-500">*</span></label>
                                 <select id="industry" name="industry" class="form-input" required>
                                     <option value="" disabled selected>اختر القطاع...</option>
                                     <option value="خدمي">القطاع الخدمي</option>
@@ -109,9 +128,9 @@
                             </div>
                         </div>
 
-                        <div class="pt-4 border-t border-gray-100">
-                            <label class="form-label">المنتجات التجارية التي تتعاملون بها عبر مصرفنا (اختر كل ما ينطبق) *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                        <div class="pt-6 border-t border-slate-100">
+                            <label class="form-label">المنتجات التجارية التي تتعاملون بها عبر مصرفنا <span class="text-xs text-slate-500 font-normal">(اختر كل ما ينطبق)</span> <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 <label class="formal-choice"><input type="checkbox" name="services_chk" value="الاعتمادات المستندية" onchange="updateDynamicQuestions()"><span class="formal-choice-text">الاعتمادات المستندية (L/Cs)</span></label>
                                 <label class="formal-choice"><input type="checkbox" name="services_chk" value="خطابات الضمان" onchange="updateDynamicQuestions()"><span class="formal-choice-text">خطابات الضمان (L/Gs)</span></label>
                                 <label class="formal-choice"><input type="checkbox" name="services_chk" value="التحاصيل المستندية" onchange="updateDynamicQuestions()"><span class="formal-choice-text">التحاصيل المستندية (Collections)</span></label>
@@ -122,23 +141,27 @@
                 </div>
 
                 <div class="form-step" id="step2">
-                    <div class="border-b border-gray-200 pb-4 mb-6">
-                        <h3 class="text-lg font-bold text-gray-900">القسم الثاني: التقييم التشغيلي للخدمات</h3>
+                    <div class="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-8">
+                        <div class="bg-[var(--primary)] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+                        <h3 class="text-xl font-black text-slate-800">التقييم التشغيلي للخدمات المستخدمة</h3>
                     </div>
 
-                    <div id="noProductMsg" class="hidden text-center p-6 text-gray-500 font-semibold bg-gray-50 rounded">
-                        يرجى العودة للقسم السابق واختيار منتج تجاري واحد على الأقل.
+                    <div id="noProductMsg" class="hidden text-center p-8 text-slate-500 font-bold bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                        <i class="fas fa-info-circle text-3xl mb-3 text-slate-400"></i><br>
+                        يرجى العودة للقسم السابق واختيار منتج تجاري واحد على الأقل للمتابعة.
                     </div>
 
-                    <div class="space-y-8" id="dynamicQuestionsContainer">
+                    <div class="space-y-10" id="dynamicQuestionsContainer">
                         
                         <!-- الاعتمادات المستندية -->
-                        <div class="question-block hidden border border-gray-200 p-5 rounded-lg bg-gray-50" id="q_block_lc">
-                            <h4 class="font-bold text-[var(--primary)] mb-4 border-b border-gray-200 pb-2">تقييم الاعتمادات المستندية (L/Cs)</h4>
-                            <div class="space-y-6">
+                        <div class="question-block hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="q_block_lc">
+                            <h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2">
+                                <i class="fas fa-file-invoice text-[var(--secondary)]"></i> الاعتمادات المستندية (L/Cs)
+                            </h4>
+                            <div class="space-y-8">
                                 <div>
-                                    <label class="form-label text-sm">1. تقييم سرعة إصدار وتعديل الاعتمادات *</label>
-                                    <div class="rating-grid mt-2">
+                                    <label class="form-label">تقييم سرعة إصدار وتعديل الاعتمادات المستندية <span class="text-red-500">*</span></label>
+                                    <div class="rating-grid mt-3">
                                         <label class="rating-box"><input type="radio" name="q_lc_speed" value="1" class="hidden"><div>1</div></label>
                                         <label class="rating-box"><input type="radio" name="q_lc_speed" value="2" class="hidden"><div>2</div></label>
                                         <label class="rating-box"><input type="radio" name="q_lc_speed" value="3" class="hidden"><div>3</div></label>
@@ -150,27 +173,33 @@
                                         <label class="rating-box"><input type="radio" name="q_lc_speed" value="9" class="hidden"><div>9</div></label>
                                         <label class="rating-box"><input type="radio" name="q_lc_speed" value="10" class="hidden"><div>10</div></label>
                                     </div>
-                                    <textarea name="lc_speed_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى توضيح سبب تقييمك للسرعة... *" required></textarea>
+                                    <div class="flex justify-between text-xs font-bold mt-2 px-2">
+                                        <span class="text-red-500 flex items-center gap-1"><i class="fas fa-arrow-down text-[10px]"></i> 1 (الأسوأ)</span>
+                                        <span class="text-green-600 flex items-center gap-1">10 (الأفضل) <i class="fas fa-arrow-up text-[10px]"></i></span>
+                                    </div>
+                                    <textarea name="lc_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك للسرعة... *" required></textarea>
                                 </div>
-                                <div class="pt-4 border-t border-gray-200">
-                                    <label class="form-label text-sm">2. كيف تقيمون كفاءة البنك الشاملة في إدارة الاعتمادات من حيث (احترافية فحص المستندات، وسهولة القنوات الرقمية)؟ *</label>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                                <div class="pt-6 border-t border-slate-100">
+                                    <label class="form-label">كيف تقيمون كفاءة البنك الشاملة في إدارة الاعتمادات من حيث (احترافية فحص المستندات، وسهولة القنوات الرقمية)؟ <span class="text-red-500">*</span></label>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                                         <label class="formal-choice"><input type="radio" name="q_lc_combined" value="ممتازة"><span class="formal-choice-text">ممتازة (إجراءات سلسة وقنوات فعالة)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_lc_combined" value="مقبولة"><span class="formal-choice-text">مقبولة (تفي بالغرض ضمن المعتاد)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_lc_combined" value="تحتاج تحسين"><span class="formal-choice-text">تحتاج تحسين (جهد يدوي ومتابعة مستمرة)</span></label>
                                     </div>
-                                    <textarea name="lc_combined_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
+                                    <textarea name="lc_combined_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <!-- خطابات الضمان -->
-                        <div class="question-block hidden border border-gray-200 p-5 rounded-lg bg-gray-50" id="q_block_lg">
-                            <h4 class="font-bold text-[var(--primary)] mb-4 border-b border-gray-200 pb-2">تقييم خطابات الضمان (L/Gs)</h4>
-                            <div class="space-y-6">
+                        <div class="question-block hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="q_block_lg">
+                            <h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2">
+                                <i class="fas fa-shield-alt text-[var(--secondary)]"></i> خطابات الضمان (L/Gs)
+                            </h4>
+                            <div class="space-y-8">
                                 <div>
-                                    <label class="form-label text-sm">1. سرعة الإنجاز في إصدار خطابات الضمان *</label>
-                                    <div class="rating-grid mt-2">
+                                    <label class="form-label">سرعة الإنجاز في إصدار خطابات الضمان <span class="text-red-500">*</span></label>
+                                    <div class="rating-grid mt-3">
                                         <label class="rating-box"><input type="radio" name="q_lg_speed" value="1" class="hidden"><div>1</div></label>
                                         <label class="rating-box"><input type="radio" name="q_lg_speed" value="2" class="hidden"><div>2</div></label>
                                         <label class="rating-box"><input type="radio" name="q_lg_speed" value="3" class="hidden"><div>3</div></label>
@@ -182,27 +211,33 @@
                                         <label class="rating-box"><input type="radio" name="q_lg_speed" value="9" class="hidden"><div>9</div></label>
                                         <label class="rating-box"><input type="radio" name="q_lg_speed" value="10" class="hidden"><div>10</div></label>
                                     </div>
-                                    <textarea name="lg_speed_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى توضيح سبب تقييمك للسرعة... *" required></textarea>
+                                    <div class="flex justify-between text-xs font-bold mt-2 px-2">
+                                        <span class="text-red-500 flex items-center gap-1"><i class="fas fa-arrow-down text-[10px]"></i> 1 (الأسوأ)</span>
+                                        <span class="text-green-600 flex items-center gap-1">10 (الأفضل) <i class="fas fa-arrow-up text-[10px]"></i></span>
+                                    </div>
+                                    <textarea name="lg_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك للسرعة... *" required></textarea>
                                 </div>
-                                <div class="pt-4 border-t border-gray-200">
-                                    <label class="form-label text-sm">2. ما مدى تقييمكم لمرونة البنك من حيث (قبول صيغ المستفيدين، وسرعة المعالجة للتعديل أو التجديد)؟ *</label>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                                <div class="pt-6 border-t border-slate-100">
+                                    <label class="form-label">ما مدى تقييمكم لمرونة البنك من حيث (قبول صيغ المستفيدين، وسرعة المعالجة للتعديل أو التجديد)؟ <span class="text-red-500">*</span></label>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                                         <label class="formal-choice"><input type="radio" name="q_lg_combined" value="مرن جداً"><span class="formal-choice-text">مرن جداً (استجابة سريعة للصيغ)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_lg_combined" value="مقبول"><span class="formal-choice-text">مقبول (ضمن المعتاد في السوق)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_lg_combined" value="غير مرن"><span class="formal-choice-text">غير مرن (تعقيد وتأخير)</span></label>
                                     </div>
-                                    <textarea name="lg_combined_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
+                                    <textarea name="lg_combined_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <!-- التحاصيل -->
-                        <div class="question-block hidden border border-gray-200 p-5 rounded-lg bg-gray-50" id="q_block_coll">
-                            <h4 class="font-bold text-[var(--primary)] mb-4 border-b border-gray-200 pb-2">تقييم التحاصيل المستندية (Collections)</h4>
-                            <div class="space-y-6">
+                        <div class="question-block hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="q_block_coll">
+                            <h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2">
+                                <i class="fas fa-folder-open text-[var(--secondary)]"></i> التحاصيل المستندية (Collections)
+                            </h4>
+                            <div class="space-y-8">
                                 <div>
-                                    <label class="form-label text-sm">1. دقة وسرعة الإشعار وتسليم مستندات التحاصيل *</label>
-                                    <div class="rating-grid mt-2">
+                                    <label class="form-label">دقة وسرعة الإشعار وتسليم مستندات التحاصيل <span class="text-red-500">*</span></label>
+                                    <div class="rating-grid mt-3">
                                         <label class="rating-box"><input type="radio" name="q_coll_speed" value="1" class="hidden"><div>1</div></label>
                                         <label class="rating-box"><input type="radio" name="q_coll_speed" value="2" class="hidden"><div>2</div></label>
                                         <label class="rating-box"><input type="radio" name="q_coll_speed" value="3" class="hidden"><div>3</div></label>
@@ -214,26 +249,32 @@
                                         <label class="rating-box"><input type="radio" name="q_coll_speed" value="9" class="hidden"><div>9</div></label>
                                         <label class="rating-box"><input type="radio" name="q_coll_speed" value="10" class="hidden"><div>10</div></label>
                                     </div>
-                                    <textarea name="coll_speed_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى توضيح سبب تقييمك... *" required></textarea>
+                                    <div class="flex justify-between text-xs font-bold mt-2 px-2">
+                                        <span class="text-red-500 flex items-center gap-1"><i class="fas fa-arrow-down text-[10px]"></i> 1 (الأسوأ)</span>
+                                        <span class="text-green-600 flex items-center gap-1">10 (الأفضل) <i class="fas fa-arrow-up text-[10px]"></i></span>
+                                    </div>
+                                    <textarea name="coll_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك... *" required></textarea>
                                 </div>
-                                <div class="pt-4 border-t border-gray-200">
-                                    <label class="form-label text-sm">2. كيف تقيمون كفاءة معالجة التحاصيل المستندية من حيث أمان المستندات وسهولة الإجراءات؟ *</label>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                                <div class="pt-6 border-t border-slate-100">
+                                    <label class="form-label">كيف تقيمون كفاءة معالجة التحاصيل المستندية من حيث أمان المستندات وسهولة الإجراءات؟ <span class="text-red-500">*</span></label>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
                                         <label class="formal-choice"><input type="radio" name="q_coll_combined" value="ممتازة"><span class="formal-choice-text">ممتازة (إجراءات آمنة وواضحة)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_coll_combined" value="تحتاج تحسين"><span class="formal-choice-text">تحتاج تحسين (يوجد تباين أحياناً)</span></label>
                                     </div>
-                                    <textarea name="coll_combined_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
+                                    <textarea name="coll_combined_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <!-- الحوالات -->
-                        <div class="question-block hidden border border-gray-200 p-5 rounded-lg bg-gray-50" id="q_block_swift">
-                            <h4 class="font-bold text-[var(--primary)] mb-4 border-b border-gray-200 pb-2">تقييم الحوالات الخارجية (Swift)</h4>
-                            <div class="space-y-6">
+                        <div class="question-block hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="q_block_swift">
+                            <h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2">
+                                <i class="fas fa-exchange-alt text-[var(--secondary)]"></i> الحوالات الخارجية (Swift)
+                            </h4>
+                            <div class="space-y-8">
                                 <div>
-                                    <label class="form-label text-sm">1. سرعة تنفيذ الحوالات الخارجية ودقة تتبعها *</label>
-                                    <div class="rating-grid mt-2">
+                                    <label class="form-label">سرعة تنفيذ الحوالات الخارجية ودقة تتبعها <span class="text-red-500">*</span></label>
+                                    <div class="rating-grid mt-3">
                                         <label class="rating-box"><input type="radio" name="q_swift_speed" value="1" class="hidden"><div>1</div></label>
                                         <label class="rating-box"><input type="radio" name="q_swift_speed" value="2" class="hidden"><div>2</div></label>
                                         <label class="rating-box"><input type="radio" name="q_swift_speed" value="3" class="hidden"><div>3</div></label>
@@ -245,16 +286,20 @@
                                         <label class="rating-box"><input type="radio" name="q_swift_speed" value="9" class="hidden"><div>9</div></label>
                                         <label class="rating-box"><input type="radio" name="q_swift_speed" value="10" class="hidden"><div>10</div></label>
                                     </div>
-                                    <textarea name="swift_speed_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى توضيح سبب تقييمك... *" required></textarea>
+                                    <div class="flex justify-between text-xs font-bold mt-2 px-2">
+                                        <span class="text-red-500 flex items-center gap-1"><i class="fas fa-arrow-down text-[10px]"></i> 1 (الأسوأ)</span>
+                                        <span class="text-green-600 flex items-center gap-1">10 (الأفضل) <i class="fas fa-arrow-up text-[10px]"></i></span>
+                                    </div>
+                                    <textarea name="swift_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك... *" required></textarea>
                                 </div>
-                                <div class="pt-4 border-t border-gray-200">
-                                    <label class="form-label text-sm">2. كيف تقيمون الحوالات من حيث (تنافسية أسعار الصرف FX، وسرعة حل استفسارات البنوك المراسلة)؟ *</label>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                                <div class="pt-6 border-t border-slate-100">
+                                    <label class="form-label">كيف تقيمون الحوالات من حيث (تنافسية أسعار الصرف FX، وسرعة حل استفسارات البنوك المراسلة)؟ <span class="text-red-500">*</span></label>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                                         <label class="formal-choice"><input type="radio" name="q_swift_combined" value="تنافسية عالية"><span class="formal-choice-text">تنافسية عالية (أسعار ممتازة وحل سريع)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_swift_combined" value="مقبولة"><span class="formal-choice-text">مقبولة (مماثلة لمتوسط السوق)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_swift_combined" value="تحتاج تحسين"><span class="formal-choice-text">تحتاج تحسين (أسعار مرتفعة أو بطء)</span></label>
                                     </div>
-                                    <textarea name="swift_combined_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
+                                    <textarea name="swift_combined_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -263,25 +308,26 @@
                 </div>
 
                 <div class="form-step" id="step3">
-                    <div class="border-b border-gray-200 pb-4 mb-6">
-                        <h3 class="text-lg font-bold text-gray-900">القسم الثالث: التقييم العام والتنافسية السعرية</h3>
+                    <div class="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-8">
+                        <div class="bg-[var(--primary)] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+                        <h3 class="text-xl font-black text-slate-800">التقييم العام والتنافسية الاستراتيجية</h3>
                     </div>
 
-                    <div class="space-y-8">
+                    <div class="space-y-10">
                         
                         <div class="question-block">
-                            <label class="form-label">1. التنافسية الشاملة لرسوم العمليات التجارية وهوامش أسعار الصرف مقارنة بالسوق *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                            <label class="form-label">التنافسية الشاملة لرسوم العمليات التجارية وهوامش أسعار الصرف مقارنة بالسوق <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                                 <label class="formal-choice"><input type="radio" name="pricing_comp" value="أفضل من السوق"><span class="formal-choice-text">تنافسية جداً (أفضل من السوق)</span></label>
                                 <label class="formal-choice"><input type="radio" name="pricing_comp" value="مماثلة للسوق"><span class="formal-choice-text">عادلة (مماثلة لمتوسط السوق)</span></label>
                                 <label class="formal-choice"><input type="radio" name="pricing_comp" value="أقل تنافسية"><span class="formal-choice-text">أقل تنافسية (مرتفعة)</span></label>
                             </div>
-                            <textarea name="pricing_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى التوضيح بمزيد من التفصيل... *" required></textarea>
+                            <textarea name="pricing_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بمزيد من التفصيل... *" required></textarea>
                         </div>
 
-                        <div class="question-block pt-4 border-t border-gray-200">
-                            <label class="form-label">2. ما هي العوامل الأساسية التي قد توجه عملياتكم التجارية لبنوك أخرى؟ (اختر كل ما ينطبق) *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                        <div class="question-block pt-6 border-t border-slate-100">
+                            <label class="form-label">ما هي العوامل الأساسية التي قد توجه عملياتكم التجارية لبنوك أخرى؟ <span class="text-xs text-slate-500 font-normal">(اختر كل ما ينطبق)</span> <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                                 <label class="formal-choice"><input type="checkbox" name="switch_driver_chk" value="التسعير"><span class="formal-choice-text">التسعير (ارتفاع الرسوم أو أسعار الصرف)</span></label>
                                 <label class="formal-choice"><input type="checkbox" name="switch_driver_chk" value="السرعة"><span class="formal-choice-text">بطء الإنجاز في العمليات التجارية</span></label>
                                 <label class="formal-choice"><input type="checkbox" name="switch_driver_chk" value="التقنية"><span class="formal-choice-text">نقص كفاءة المنصة الرقمية للبنك</span></label>
@@ -289,78 +335,95 @@
                                 <label class="formal-choice"><input type="checkbox" name="switch_driver_chk" value="البنوك المراسلة"><span class="formal-choice-text">محدودية شبكة البنوك المراسلة دولياً</span></label>
                                 <label class="formal-choice"><input type="checkbox" name="switch_driver_chk" value="المرونة الائتمانية"><span class="formal-choice-text">عدم مرونة الشروط والحدود الائتمانية</span></label>
                             </div>
-                            <textarea name="switch_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى التوضيح... *" required></textarea>
+                            <textarea name="switch_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح... *" required></textarea>
                         </div>
 
-                        <div class="question-block pt-4 border-t border-gray-200">
-                            <label class="form-label">3. مستوى التواصل والدعم المقدم من فريق العمل (مدراء العلاقات وإدارة العمليات التجارية) في فهم احتياجاتكم، وسرعة حل التحديات، وتقديم المشورة الاستباقية *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                        <div class="question-block pt-6 border-t border-slate-100">
+                            <label class="form-label">مستوى التواصل والدعم المقدم من فريق العمل (مدراء العلاقات وإدارة العمليات التجارية) في فهم احتياجاتكم، وسرعة حل التحديات، وتقديم المشورة الاستباقية <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                                 <label class="formal-choice"><input type="radio" name="advisory_role" value="ممتاز"><span class="formal-choice-text">ممتاز (شريك استراتيجي ومبادر)</span></label>
                                 <label class="formal-choice"><input type="radio" name="advisory_role" value="مقبول"><span class="formal-choice-text">مقبول (يستجيب بشكل اعتيادي)</span></label>
                                 <label class="formal-choice"><input type="radio" name="advisory_role" value="ضعيف"><span class="formal-choice-text">ضعيف (تواصل بطيء ودعم غير كافٍ)</span></label>
                             </div>
-                            <textarea name="advisory_reason" rows="2" class="form-input mt-3 text-sm resize-none" placeholder="يرجى توضيح تقييمك لفريق العمل... *" required></textarea>
+                            <textarea name="advisory_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح تقييمك لفريق العمل... *" required></textarea>
                         </div>
 
-                        <div class="question-block pt-4 border-t border-gray-200">
-                            <label class="form-label text-[var(--primary)]">4. ميزة، أو خدمة تجارية، تتعاملون بها مع بنوك أخرى وتتطلعون لتوفيرها أو تحسينها لدينا *</label>
-                            <textarea name="openFeedback" rows="3" class="form-input mt-2 resize-none" placeholder="اكتب ملاحظاتك ومقترحاتك هنا... *" required></textarea>
+                        <div class="question-block pt-6 border-t border-slate-100">
+                            <label class="form-label text-[var(--primary)]">ميزة، أو خدمة تجارية، تتعاملون بها مع بنوك أخرى وتتطلعون لتوفيرها أو تحسينها لدينا <span class="text-red-500">*</span></label>
+                            <textarea name="openFeedback" rows="3" class="form-input mt-3 resize-none bg-slate-50" placeholder="اكتب ملاحظاتك ومقترحاتك هنا... *" required></textarea>
                         </div>
 
-                        <div class="bg-gray-50 p-6 rounded border border-gray-200 question-block mt-8">
-                            <label class="form-label text-[var(--primary)] text-lg">5. بناءً على تجربتكم الشاملة، ما احتمالية توصيتكم بخدماتنا التجارية لشركاء أعمال آخرين؟ *</label>
-                            <div class="rating-grid mt-4">
-                                <label class="rating-box"><input type="radio" name="nps" value="1" class="hidden"><div>1</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="2" class="hidden"><div>2</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="3" class="hidden"><div>3</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="4" class="hidden"><div>4</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="5" class="hidden"><div>5</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="6" class="hidden"><div>6</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="7" class="hidden"><div>7</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="8" class="hidden"><div>8</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="9" class="hidden"><div>9</div></label>
-                                <label class="rating-box"><input type="radio" name="nps" value="10" class="hidden"><div>10</div></label>
+                        <div class="bg-[var(--primary)] text-white p-8 rounded-xl shadow-md question-block mt-10 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                            
+                            <label class="form-label text-white text-lg font-black mb-6 relative z-10">بناءً على تجربتكم الشاملة، ما احتمالية توصيتكم بخدماتنا التجارية لشركاء أعمال آخرين؟ <span class="text-red-300">*</span></label>
+                            
+                            <div class="rating-grid mt-4 relative z-10" id="npsGrid">
+                                <label class="rating-box"><input type="radio" name="nps" value="1" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">1</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="2" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">2</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="3" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">3</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="4" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">4</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="5" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">5</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="6" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">6</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="7" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">7</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="8" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">8</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="9" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">9</div></label>
+                                <label class="rating-box"><input type="radio" name="nps" value="10" class="hidden"><div class="!border-transparent !bg-white/10 !text-white hover:!bg-white/20">10</div></label>
                             </div>
-                            <div class="flex justify-between text-xs font-bold text-gray-500 mt-2 px-1">
-                                <span>1 (مستبعد)</span>
+                            <div class="flex justify-between text-xs font-bold text-white/70 mt-3 px-1 relative z-10">
+                                <span>1 (مستبعد جداً)</span>
                                 <span>10 (بالتأكيد)</span>
                             </div>
-                            <textarea name="nps_reason" rows="2" class="form-input mt-4 text-sm resize-none" placeholder="ما هو السبب الرئيسي لتقييمك؟ *" required></textarea>
+                            <textarea name="nps_reason" rows="2" class="form-input mt-6 text-sm resize-none relative z-10 !text-slate-900 border-none" placeholder="ما هو السبب الرئيسي لتقييمك أعلاه؟ *" required></textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-10 flex justify-between items-center border-t border-gray-200 pt-6">
-                    <button type="button" id="prevBtn" onclick="nextPrev(-1)" class="btn-secondary px-6 py-2.5 rounded font-bold text-sm hidden">
-                        رجوع
+                <div class="mt-10 flex justify-between items-center border-t-2 border-slate-100 pt-6">
+                    <button type="button" id="prevBtn" onclick="nextPrev(-1)" class="bg-white border-2 border-slate-300 text-slate-600 hover:bg-slate-50 px-6 py-3 rounded-lg font-bold text-sm hidden transition-all">
+                        <i class="fas fa-arrow-right ml-2"></i> رجوع
                     </button>
-                    <button type="button" id="nextBtn" onclick="nextPrev(1)" class="btn-primary px-8 py-2.5 rounded font-bold text-sm ml-auto">
-                        التالي
+                    <button type="button" id="nextBtn" onclick="nextPrev(1)" class="btn-primary px-8 py-3 rounded-lg font-bold text-sm mr-auto flex items-center gap-2">
+                        التالي <i class="fas fa-arrow-left"></i>
                     </button>
-                    <button type="button" id="submitBtn" onclick="submitSurvey()" class="btn-primary px-8 py-2.5 rounded font-bold text-sm hidden shadow-md">
-                        اعتماد التقييم
+                    <button type="button" id="submitBtn" onclick="submitSurvey()" class="btn-primary px-10 py-3 rounded-lg font-black text-sm hidden items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i> اعتماد وإرسال التقييم
                     </button>
                 </div>
             </form>
         </div>
 
-        <!-- رسالة الشكر -->
-        <div id="thankYouView" class="hidden mt-8">
-            <div class="bg-white rounded border-t-4 border-[var(--primary)] shadow-sm p-10 text-center max-w-2xl mx-auto">
-                <h2 class="text-2xl font-black text-gray-900 mb-4">تم استلام تقييمكم بنجاح</h2>
-                <p class="text-gray-600 font-semibold leading-relaxed mb-8">
+        <div id="thankYouView" class="hidden mt-10">
+            <div class="bg-white rounded-xl border-t-4 border-[var(--primary)] shadow-xl p-10 text-center max-w-2xl mx-auto">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-check text-4xl text-green-600"></i>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-black text-gray-900 mb-4">تم استلام تقييمكم بنجاح</h2>
+                <p class="text-slate-600 font-bold leading-relaxed mb-8 text-lg">
                     نتقدم بخالص الشكر والتقدير لتعاونكم. مدخلاتكم تعتبر ركيزة أساسية في تطوير منظومة خدماتنا التجارية.
                 </p>
-                <button onclick="location.reload()" class="btn-secondary px-6 py-2 rounded text-sm font-bold">إنهاء</button>
             </div>
         </div>
     </main>
 
     <script>
+        // الرابط الفعلي الخاص بجوجل سكريبت (تم اعتماده وتحديثه)
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTyWfsPwWPTtEWVLfuImkGU4jiAYXVRreOMZuprCqKJ779cXXd1k-8B-_t8IUYOyGNVQ/exec';
 
         let currentTab = 0;
         const formSteps = document.querySelectorAll('.form-step');
+
+        document.querySelectorAll('#npsGrid input').forEach(input => {
+            input.addEventListener('change', function() {
+                document.querySelectorAll('#npsGrid div').forEach(div => {
+                    div.style.background = ''; div.style.color = '';
+                });
+                if(this.checked) {
+                    this.nextElementSibling.style.background = 'white';
+                    this.nextElementSibling.style.color = 'var(--primary)';
+                }
+            });
+        });
 
         showTab(currentTab);
 
@@ -372,13 +435,13 @@
             document.getElementById('progressBar').style.width = progress + '%';
             document.getElementById('progressText').innerText = Math.round(progress) + '%';
 
-            document.getElementById("prevBtn").style.display = n === 0 ? "none" : "inline-block";
+            document.getElementById("prevBtn").style.display = n === 0 ? "none" : "inline-flex";
             
             if (n === (formSteps.length - 1)) {
                 document.getElementById("nextBtn").style.display = "none";
-                document.getElementById("submitBtn").style.display = "inline-block";
+                document.getElementById("submitBtn").style.display = "inline-flex";
             } else {
-                document.getElementById("nextBtn").style.display = "inline-block";
+                document.getElementById("nextBtn").style.display = "inline-flex";
                 document.getElementById("submitBtn").style.display = "none";
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -411,10 +474,10 @@
             let valid = true;
             let currentStepDiv = formSteps[currentTab];
             
-            let inputs = currentStepDiv.querySelectorAll('input[required], select[required], textarea[required]');
+            let inputs = currentStepDiv.querySelectorAll('input[type="text"][required], select[required], textarea[required]');
             inputs.forEach(input => {
                 let block = input.closest('.question-block');
-                if (block && block.classList.contains('hidden')) return;
+                if (block && block.classList.contains('hidden')) return; 
 
                 if (input.value.trim() === "") {
                     valid = false;
@@ -440,7 +503,7 @@
                 if(switchDriversChecked === 0) valid = false;
             }
 
-            if (!valid) showToastError("يرجى استكمال جميع الحقول الإلزامية (الخيارات والنصوص).");
+            if (!valid) showToastError("يرجى استكمال جميع الحقول الإلزامية وتوضيحات التقييم قبل المتابعة.");
             return valid;
         }
 
@@ -448,27 +511,30 @@
             const toast = document.getElementById('toast');
             document.getElementById('toastMessage').innerText = msg;
             toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 4000);
+            setTimeout(() => toast.classList.add('hidden'), 5000);
         }
 
         async function submitSurvey() {
             if (!validateForm()) return;
 
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "جاري الإرسال...";
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري إرسال البيانات...';
             btn.disabled = true;
-            btn.classList.add('opacity-75', 'cursor-not-allowed');
 
-            const formData = new FormData(document.getElementById('surveyForm'));
+            const formElement = document.getElementById('surveyForm');
+            const formData = new FormData(formElement);
             
-            // تجميع الخيارات المتعددة تحت مفاتيح واضحة
             const services = Array.from(document.querySelectorAll('input[name="services_chk"]:checked')).map(el => el.value).join('، ');
             const switch_drivers = Array.from(document.querySelectorAll('input[name="switch_driver_chk"]:checked')).map(el => el.value).join('، ');
             
             formData.set('services', services);
             formData.set('switch_drivers', switch_drivers);
 
+            formData.delete('services_chk');
+            formData.delete('switch_driver_chk');
+
             try {
+                // إرسال البيانات
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -480,10 +546,9 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
             } catch (error) {
-                showToastError('حدث خطأ أثناء الإرسال. يرجى التأكد من اتصالك بالإنترنت.');
-                btn.innerText = "اعتماد التقييم";
+                showToastError('حدث خطأ أثناء الإرسال. يرجى التأكد من اتصالك بالإنترنت والمحاولة مجدداً.');
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> اعتماد وإرسال التقييم';
                 btn.disabled = false;
-                btn.classList.remove('opacity-75', 'cursor-not-allowed');
             }
         }
     </script>
