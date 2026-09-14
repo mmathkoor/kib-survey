@@ -132,9 +132,9 @@
                             <label class="form-label">المنتجات التجارية التي تتعاملون بها عبر مصرفنا <span class="text-xs text-slate-500 font-normal">(اختر كل ما ينطبق)</span> <span class="text-red-500">*</span></label>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 <label class="formal-choice"><input type="checkbox" name="services_chk" value="الاعتمادات المستندية" onchange="updateDynamicQuestions()"><span class="formal-choice-text">الاعتمادات المستندية (L/Cs)</span></label>
+                                <label class="formal-choice"><input type="checkbox" name="services_chk" value="الحوالات الخارجية" onchange="updateDynamicQuestions()"><span class="formal-choice-text">الحوالات الخارجية (Swift)</span></label>
                                 <label class="formal-choice"><input type="checkbox" name="services_chk" value="خطابات الضمان" onchange="updateDynamicQuestions()"><span class="formal-choice-text">خطابات الضمان (L/Gs)</span></label>
                                 <label class="formal-choice"><input type="checkbox" name="services_chk" value="التحاصيل المستندية" onchange="updateDynamicQuestions()"><span class="formal-choice-text">التحاصيل المستندية (Collections)</span></label>
-                                <label class="formal-choice"><input type="checkbox" name="services_chk" value="الحوالات الخارجية" onchange="updateDynamicQuestions()"><span class="formal-choice-text">الحوالات الخارجية (Swift)</span></label>
                             </div>
                         </div>
                     </div>
@@ -191,6 +191,44 @@
                             </div>
                         </div>
 
+                        <!-- الحوالات -->
+                        <div class="question-block hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="q_block_swift">
+                            <h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2">
+                                <i class="fas fa-exchange-alt text-[var(--secondary)]"></i> الحوالات الخارجية (Swift)
+                            </h4>
+                            <div class="space-y-8">
+                                <div>
+                                    <label class="form-label">سرعة تنفيذ الحوالات الخارجية ودقة تتبعها <span class="text-red-500">*</span></label>
+                                    <div class="rating-grid mt-3">
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="1" class="hidden"><div>1</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="2" class="hidden"><div>2</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="3" class="hidden"><div>3</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="4" class="hidden"><div>4</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="5" class="hidden"><div>5</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="6" class="hidden"><div>6</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="7" class="hidden"><div>7</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="8" class="hidden"><div>8</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="9" class="hidden"><div>9</div></label>
+                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="10" class="hidden"><div>10</div></label>
+                                    </div>
+                                    <div class="flex justify-between text-xs font-bold mt-2 px-2">
+                                        <span class="text-red-500 flex items-center gap-1"><i class="fas fa-arrow-down text-[10px]"></i> 1 (الأسوأ)</span>
+                                        <span class="text-green-600 flex items-center gap-1">10 (الأفضل) <i class="fas fa-arrow-up text-[10px]"></i></span>
+                                    </div>
+                                    <textarea name="swift_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك... *" required></textarea>
+                                </div>
+                                <div class="pt-6 border-t border-slate-100">
+                                    <label class="form-label">كيف تقيمون الحوالات من حيث (تنافسية أسعار الصرف FX، وسرعة الرد على استفسارات البنوك المراسلة)؟ <span class="text-red-500">*</span></label>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                                        <label class="formal-choice"><input type="radio" name="q_swift_combined" value="تنافسية عالية"><span class="formal-choice-text">تنافسية عالية (أسعار ممتازة ومعالجةسريعة)</span></label>
+                                        <label class="formal-choice"><input type="radio" name="q_swift_combined" value="مقبولة"><span class="formal-choice-text">مقبولة (مماثلة لمتوسط السوق)</span></label>
+                                        <label class="formal-choice"><input type="radio" name="q_swift_combined" value="تحتاج تحسين"><span class="formal-choice-text">تحتاج تحسين (أسعار مرتفعة أو بطء)</span></label>
+                                    </div>
+                                    <textarea name="swift_combined_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- خطابات الضمان -->
                         <div class="question-block hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="q_block_lg">
                             <h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2">
@@ -218,7 +256,7 @@
                                     <textarea name="lg_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك للسرعة... *" required></textarea>
                                 </div>
                                 <div class="pt-6 border-t border-slate-100">
-                                    <label class="form-label">ما مدى تقييمكم لمرونة البنك من حيث (قبول صيغ المستفيدين، وسرعة المعالجة للتعديل أو التجديد)؟ <span class="text-red-500">*</span></label>
+                                    <label class="form-label">ما مدى تقييمكم لمرونة البنك من حيث (قبول صيغ المستفيدين، وسرعة إجراءات التعديل أو التجديد)؟ <span class="text-red-500">*</span></label>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                                         <label class="formal-choice"><input type="radio" name="q_lg_combined" value="مرن جداً"><span class="formal-choice-text">مرن جداً (استجابة سريعة للصيغ)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_lg_combined" value="مقبول"><span class="formal-choice-text">مقبول (ضمن المعتاد في السوق)</span></label>
@@ -256,50 +294,12 @@
                                     <textarea name="coll_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك... *" required></textarea>
                                 </div>
                                 <div class="pt-6 border-t border-slate-100">
-                                    <label class="form-label">كيف تقيمون كفاءة معالجة التحاصيل المستندية من حيث أمان المستندات وسهولة الإجراءات؟ <span class="text-red-500">*</span></label>
+                                    <label class="form-label">كيف تقيمون كفاءة البنك في التعامل مع التحاصيل المستندية وسهولة اجراءاته؟ <span class="text-red-500">*</span></label>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                                        <label class="formal-choice"><input type="radio" name="q_coll_combined" value="ممتازة"><span class="formal-choice-text">ممتازة (إجراءات آمنة وواضحة)</span></label>
+                                        <label class="formal-choice"><input type="radio" name="q_coll_combined" value="ممتازة"><span class="formal-choice-text">ممتازة (إجراءات سهلة وواضحة)</span></label>
                                         <label class="formal-choice"><input type="radio" name="q_coll_combined" value="تحتاج تحسين"><span class="formal-choice-text">تحتاج تحسين (يوجد تباين أحياناً)</span></label>
                                     </div>
                                     <textarea name="coll_combined_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- الحوالات -->
-                        <div class="question-block hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="q_block_swift">
-                            <h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2">
-                                <i class="fas fa-exchange-alt text-[var(--secondary)]"></i> الحوالات الخارجية (Swift)
-                            </h4>
-                            <div class="space-y-8">
-                                <div>
-                                    <label class="form-label">سرعة تنفيذ الحوالات الخارجية ودقة تتبعها <span class="text-red-500">*</span></label>
-                                    <div class="rating-grid mt-3">
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="1" class="hidden"><div>1</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="2" class="hidden"><div>2</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="3" class="hidden"><div>3</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="4" class="hidden"><div>4</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="5" class="hidden"><div>5</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="6" class="hidden"><div>6</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="7" class="hidden"><div>7</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="8" class="hidden"><div>8</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="9" class="hidden"><div>9</div></label>
-                                        <label class="rating-box"><input type="radio" name="q_swift_speed" value="10" class="hidden"><div>10</div></label>
-                                    </div>
-                                    <div class="flex justify-between text-xs font-bold mt-2 px-2">
-                                        <span class="text-red-500 flex items-center gap-1"><i class="fas fa-arrow-down text-[10px]"></i> 1 (الأسوأ)</span>
-                                        <span class="text-green-600 flex items-center gap-1">10 (الأفضل) <i class="fas fa-arrow-up text-[10px]"></i></span>
-                                    </div>
-                                    <textarea name="swift_speed_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى توضيح سبب تقييمك... *" required></textarea>
-                                </div>
-                                <div class="pt-6 border-t border-slate-100">
-                                    <label class="form-label">كيف تقيمون الحوالات من حيث (تنافسية أسعار الصرف FX، وسرعة حل استفسارات البنوك المراسلة)؟ <span class="text-red-500">*</span></label>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-                                        <label class="formal-choice"><input type="radio" name="q_swift_combined" value="تنافسية عالية"><span class="formal-choice-text">تنافسية عالية (أسعار ممتازة وحل سريع)</span></label>
-                                        <label class="formal-choice"><input type="radio" name="q_swift_combined" value="مقبولة"><span class="formal-choice-text">مقبولة (مماثلة لمتوسط السوق)</span></label>
-                                        <label class="formal-choice"><input type="radio" name="q_swift_combined" value="تحتاج تحسين"><span class="formal-choice-text">تحتاج تحسين (أسعار مرتفعة أو بطء)</span></label>
-                                    </div>
-                                    <textarea name="swift_combined_reason" rows="2" class="form-input mt-4 text-sm resize-none bg-slate-50" placeholder="يرجى التوضيح بشكل مختصر... *" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -407,7 +407,7 @@
     </main>
 
     <script>
-        // الرابط الفعلي الخاص بجوجل سكريبت (تم اعتماده وتحديثه)
+        // الرابط الفعلي الخاص بجوجل سكريبت
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTyWfsPwWPTtEWVLfuImkGU4jiAYXVRreOMZuprCqKJ779cXXd1k-8B-_t8IUYOyGNVQ/exec';
 
         let currentTab = 0;
