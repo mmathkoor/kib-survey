@@ -413,17 +413,18 @@
         let currentTab = 0;
         const formSteps = document.querySelectorAll('.form-step');
 
-        document.querySelectorAll('#npsGrid input').forEach(input => {
-            input.addEventListener('change', function() {
-                document.querySelectorAll('#npsGrid div').forEach(div => {
-                    div.style.background = ''; div.style.color = '';
-                });
-                if(this.checked) {
-                    this.nextElementSibling.style.background = 'white';
-                    this.nextElementSibling.style.color = 'var(--primary)';
-                }
-            });
+       document.querySelectorAll('#npsGrid input').forEach(input => {
+    input.addEventListener('change', function() {
+        document.querySelectorAll('#npsGrid div').forEach(div => {
+            div.style.setProperty('background-color', '', 'important');
+            div.style.setProperty('color', '', 'important');
         });
+        if(this.checked) {
+            this.nextElementSibling.style.setProperty('background-color', 'white', 'important');
+            this.nextElementSibling.style.setProperty('color', 'var(--primary)', 'important');
+        }
+    });
+});
 
         showTab(currentTab);
 
