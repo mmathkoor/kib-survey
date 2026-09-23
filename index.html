@@ -413,19 +413,22 @@
         let currentTab = 0;
         const formSteps = document.querySelectorAll('.form-step');
 
-       document.querySelectorAll('#npsGrid input').forEach(input => {
+    document.querySelectorAll('#npsGrid input').forEach(input => {
     input.addEventListener('change', function() {
+        // إعادة جميع الأرقام لحالتها الأصلية
         document.querySelectorAll('#npsGrid div').forEach(div => {
             div.style.setProperty('background-color', '', 'important');
             div.style.setProperty('color', '', 'important');
+            div.style.setProperty('transform', 'scale(1)', 'important');
         });
+        // تلوين الرقم المختار بالذهبي مع تأثير بروز
         if(this.checked) {
-            this.nextElementSibling.style.setProperty('background-color', 'white', 'important');
-            this.nextElementSibling.style.setProperty('color', 'var(--primary)', 'important');
+            this.nextElementSibling.style.setProperty('background-color', 'var(--secondary)', 'important');
+            this.nextElementSibling.style.setProperty('color', '#ffffff', 'important');
+            this.nextElementSibling.style.setProperty('transform', 'scale(1.15)', 'important');
         }
     });
 });
-
         showTab(currentTab);
 
         function showTab(n) {
