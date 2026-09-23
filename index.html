@@ -413,18 +413,21 @@
         let currentTab = 0;
         const formSteps = document.querySelectorAll('.form-step');
 
-    document.querySelectorAll('#npsGrid input').forEach(input => {
+  document.querySelectorAll('#npsGrid input').forEach(input => {
     input.addEventListener('change', function() {
-        // إعادة جميع الأرقام لحالتها الأصلية
+        // إزالة الألوان والتأثيرات عن جميع الأرقام أولاً (تصفير)
         document.querySelectorAll('#npsGrid div').forEach(div => {
-            div.style.setProperty('background-color', '', 'important');
-            div.style.setProperty('color', '', 'important');
-            div.style.setProperty('transform', 'scale(1)', 'important');
+            div.style.removeProperty('background-color');
+            div.style.removeProperty('color');
+            div.style.removeProperty('transform');
+            div.style.removeProperty('border-color');
         });
-        // تلوين الرقم المختار بالذهبي مع تأثير بروز
+        
+        // تثبيت اللون الذهبي والبروز على الرقم المختار فقط بشكل قاطع
         if(this.checked) {
             this.nextElementSibling.style.setProperty('background-color', 'var(--secondary)', 'important');
             this.nextElementSibling.style.setProperty('color', '#ffffff', 'important');
+            this.nextElementSibling.style.setProperty('border-color', 'var(--secondary)', 'important');
             this.nextElementSibling.style.setProperty('transform', 'scale(1.15)', 'important');
         }
     });
