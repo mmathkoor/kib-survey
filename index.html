@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استبيان جودة الخدمات التجارية</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+*{font-family:'Cairo',sans-serif}
+:root{--primary:#7A2128;--primary-dark:#5a181d;--secondary:#C5A059;--border-color:#E2E8F0}
+body{background:#F4F6F8;color:#1E293B}
+.progress-container{width:100%;background:#E2E8F0;border-radius:999px;height:8px;overflow:hidden}
+.progress-bar{height:100%;background:var(--secondary);transition:width .5s}
+.formal-choice{transition:.2s;border:2px solid var(--border-color);background:#fff;padding:1rem;border-radius:.75rem;cursor:pointer;display:flex;align-items:flex-start;gap:.75rem}
+.formal-choice:hover{border-color:var(--secondary);background:#fdfaf3}
+.formal-choice input{margin-top:.25rem;accent-color:var(--primary);width:1.25rem;height:1.25rem;flex-shrink:0}
+.formal-choice:has(input:checked){border-color:var(--primary);background:#fbf7f7}
+.formal-choice-text{font-size:.95rem;font-weight:700;color:#334155;line-height:1.5}
+.formal-choice:has(input:checked) .formal-choice-text{color:var(--primary);font-weight:800}
+.rating-grid{display:flex;flex-wrap:wrap;gap:.5rem}
+.rating-box{flex:1;min-width:35px}
+.rating-box div{transition:.2s;background:#fff;border:2px solid var(--border-color);text-align:center;padding:.75rem 0;font-weight:800;color:#64748B;border-radius:.5rem;cursor:pointer}
+.rating-box:hover div{border-color:var(--secondary);background:#fdfaf3;transform:translateY(-2px)}
+.rating-box input:checked+div{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-color:var(--primary-dark);box-shadow:0 4px 10px rgba(122,33,40,.3);transform:translateY(-2px)}
+.form-input{width:100%;padding:.875rem 1rem;border:2px solid var(--border-color);border-radius:.5rem;background:#fff;font-size:.95rem;font-weight:600;outline:none;transition:.2s}
+.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(122,33,40,.1)}
+.form-label{display:block;font-weight:800;font-size:1rem;margin-bottom:.75rem;color:#0F172A}
+.form-step{display:none;animation:fi .4s ease forwards;opacity:0;transform:translateY(10px)}
+.form-step.active{display:block}
+@keyframes fi{to{opacity:1;transform:none}}
+.rq+.rq{border-top:1px solid #f1f5f9;padding-top:1.5rem;margin-top:1.5rem}
+.rq.err{background:#fef2f2;border-radius:.5rem;outline:2px solid #fca5a5;outline-offset:6px}
+.rq.nps-box{background:var(--primary);color:#fff;padding:2rem;border-radius:.75rem;border-top:0;margin-top:1.5rem}
+.nps-box .form-label{color:#fff}
+.nps-box .rating-box div{background:rgba(255,255,255,.1);color:#fff;border-color:transparent}
+.nps-box .rating-box:hover div{background:rgba(255,255,255,.2)}
+.nps-box .rating-box input:checked+div{background:var(--secondary);border-color:var(--secondary);transform:scale(1.15);box-shadow:none}
+.btn-primary{background:linear-gradient(to bottom,var(--primary),var(--primary-dark));color:#fff;transition:.2s;box-shadow:0 4px 6px rgba(122,33,40,.2)}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.7;cursor:not-allowed}
+
+.topbar{height:6px;background:linear-gradient(90deg,var(--primary) 0 76%,#F2A529 76% 100%)}
+.hero{background:var(--primary);color:#fff;border-radius:20px;overflow:hidden;box-shadow:0 12px 30px rgba(91,34,38,.12);position:relative}
+.identity-bar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 30px 20px;border-bottom:1px solid rgba(255,255,255,.16)}
+.official-logo{display:flex;align-items:center;gap:18px;min-width:0}
+.logo-main{height:62px;max-width:100%;object-fit:contain}.logo-img{height:56px;max-width:150px;object-fit:contain;background:#fff;border-radius:12px;padding:6px 10px}
+.logo-symbol{position:relative;font-family:Georgia,serif;font-size:58px;line-height:.9;letter-spacing:-7px;color:#fff;direction:ltr;min-width:104px}
+.logo-symbol .idot{position:absolute;width:12px;height:12px;border-radius:50%;background:#F2A529;left:49px;top:-1px;border:2px solid var(--primary)}
+.brand-copy{border-right:1px solid rgba(255,255,255,.25);padding-right:18px;min-width:0}
+.brand-ar{font-size:19px;font-weight:800;line-height:1.35}
+.brand-en{font-family:Georgia,serif;font-size:15px}
+.brand-tag{color:#F2A529;font-size:11px;font-weight:800;direction:ltr;text-align:right}
+.official-badge{border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.08);padding:8px 12px;border-radius:100px;font-size:12px;white-space:nowrap}
+.hero-content{padding:25px 30px 28px;position:relative}
+.wm{position:absolute;left:22px;bottom:-30px;height:200px;opacity:.12;pointer-events:none}.inv{filter:grayscale(1) invert(1) contrast(1.8);mix-blend-mode:screen}.mul{mix-blend-mode:multiply}
+.hero-content:after-off{content:"";position:absolute;left:-45px;bottom:-80px;width:190px;height:190px;border-radius:50%;border:35px solid rgba(242,165,41,.09);pointer-events:none}
+.hero h1{font-size:28px;line-height:1.45;font-weight:900;margin:0 0 8px;position:relative;z-index:1}
+.hero p{margin:0;color:#F7EDEE;max-width:735px;font-size:15px;font-weight:600;line-height:1.9;position:relative;z-index:1}
+.progress-box{margin-top:22px;position:relative;z-index:1}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#F5EAEA;margin-bottom:7px}
+.hprogress{height:7px;background:rgba(255,255,255,.18);border-radius:20px;overflow:hidden}
+.hprogress>div{height:100%;background:#F2A529;transition:width .4s ease}
+.kfooter{text-align:center;padding:22px 10px 0;color:#7B7170;font-size:12px;font-weight:600}
+.kfooter strong{color:var(--primary)}.goldline{width:42px;height:3px;background:#F2A529;border-radius:10px;margin:0 auto 8px}
+@media(max-width:700px){.wm{height:130px;left:8px}.hero{border-radius:14px}.identity-bar{padding:20px}.official-badge{display:none}.logo-symbol{font-size:45px;min-width:82px}.logo-symbol .idot{width:10px;height:10px;left:38px}.brand-ar{font-size:15px}.brand-en{font-size:12px}.hero-content{padding:20px}.hero h1{font-size:22px}.brand-copy{padding-right:12px}}
+@media(max-width:450px){.brand-copy{border-right:0;padding-right:0}}
+</style></head>
+<body class="antialiased pb-12">
+<div id="pvBar" class="hidden fixed top-0 inset-x-0 z-50 bg-amber-400 text-center font-black text-sm py-1.5">وضع المعاينة — هذه مسودة غير منشورة ولن تُرسل أي ردود</div>
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden w-[90%] max-w-md shadow-2xl"><div class="bg-red-50 border-r-4 border-red-700 text-red-800 p-4 rounded-lg flex items-center gap-3"><i class="fas fa-exclamation-circle text-red-700 text-xl"></i><div class="flex-1 text-sm font-semibold" id="toastMsg"></div></div></div>
+
+<div class="topbar"></div>
+<main class="container mx-auto max-w-3xl p-4 md:p-6 mt-2">
+<header class="hero">
+ <div class="identity-bar">
+  <div class="official-logo"><img id="logoImg" class="logo-main" alt="بنك الكريمي الإسلامي" src="data:image/png;base64,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"></div>
+  <div class="official-badge" id="bBadge"></div>
+ </div>
+ <div class="hero-content"><img id="logoWm" class="wm hidden" alt="">
+  <h1 id="hT"></h1><p id="intro"></p>
+  <div class="progress-box"><div class="progress-label"><span id="pStage">المرحلة 1 من 3</span><span id="pTxt">0%</span></div><div class="hprogress"><div id="pBar" style="width:0"></div></div></div>
+ </div>
+</header>
+<div id="surveyContainer" class="mt-5 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
+ <form id="f" class="p-6 md:p-10" onsubmit="return false">
+  <div id="loading" class="text-center py-16 font-bold text-slate-500"><i class="fas fa-spinner fa-spin text-2xl text-[var(--primary)]"></i><br>جاري تحميل الاستبيان...</div>
+  <div class="form-step" id="s1"><div class="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-8"><div class="bg-[var(--primary)] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div><h3 class="text-xl font-black text-slate-800" id="h1"></h3></div>
+   <div id="p1"></div>
+   <div class="pt-6 mt-6 border-t border-slate-100" id="svc"><label class="form-label">ما الخدمات التجارية التي تستخدمونها حالياً لدى البنك؟ <span class="text-xs text-slate-500 font-normal">(اختر كل ما ينطبق)</span> <span class="text-red-500">*</span></label><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="svcList"></div></div></div>
+  <div class="form-step" id="s2"><div class="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-8"><div class="bg-[var(--primary)] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div><h3 class="text-xl font-black text-slate-800" id="h2"></h3></div>
+   <p class="text-sm font-bold text-slate-500 mb-6">مقياس التقييم: 1 يحتاج إلى تحسين، و10 ممتاز.</p><div class="space-y-10" id="secs"></div></div>
+  <div class="form-step" id="s3"><div class="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-8"><div class="bg-[var(--primary)] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div><h3 class="text-xl font-black text-slate-800" id="h3"></h3></div>
+   <div class="space-y-10" id="p3"></div><p class="text-xs text-slate-500 font-bold border-t border-slate-100 pt-4 mt-10" id="foot"></p></div>
+  <div class="mt-10 flex justify-between items-center border-t-2 border-slate-100 pt-6" id="nav" style="display:none">
+   <button type="button" id="prev" onclick="go(-1)" class="bg-white border-2 border-slate-300 text-slate-600 hover:bg-slate-50 px-6 py-3 rounded-lg font-bold text-sm"><i class="fas fa-arrow-right ml-2"></i> رجوع</button>
+   <button type="button" id="next" onclick="go(1)" class="btn-primary px-8 py-3 rounded-lg font-bold text-sm mr-auto">التالي <i class="fas fa-arrow-left"></i></button>
+   <button type="button" id="send" onclick="submitSurvey()" class="btn-primary px-10 py-3 rounded-lg font-black text-sm mr-auto"><i class="fas fa-paper-plane"></i> اعتماد وإرسال التقييم</button>
+  </div>
+ </form>
+</div>
+<div id="thanks" class="hidden mt-10"><div class="bg-white rounded-xl border-t-4 border-[var(--primary)] shadow-xl p-10 text-center max-w-2xl mx-auto">
+ <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-check text-4xl text-green-600"></i></div>
+ <h2 class="text-2xl md:text-3xl font-black text-gray-900 mb-4" id="thT"></h2><p class="text-slate-600 font-bold leading-relaxed text-lg" id="thB"></p></div></div>
+<footer class="kfooter"><img id="logoFt" class="hidden mx-auto mb-3" style="height:40px" alt=""><div class="goldline"></div><strong id="fBr"></strong> — <span id="fTag"></span><br><span id="fWeb"></span></footer>
+</main>
+<script>
+/* ملف مشترك بين الاستبيان ولوحة التحكم — ضعه بجانب survey.html و admin.html */
+const API='https://script.google.com/macros/s/AKfycbz3XBBTmBzSX3jwR2X74VsQ3ScZXFgVdbsu1QtyYlTDgHBy91qF5d_8Yyq1OJ8vsu-L/exec';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TYPES={rating:'تقييم من 1 إلى 10',nps:'مؤشر التوصية (NPS)',single:'اختيار واحد',multi:'اختيار متعدد',dropdown:'قائمة منسدلة',yesno:'نعم / لا',text:'نص قصير',paragraph:'نص طويل'};
+const KINDS={profile:'بيانات العميل (الخطوة 1)',service:'خدمة (تظهر لمن اختارها)',general:'تقييم عام (الخطوة 3)'};
+const hasOpts=t=>['single','multi','dropdown'].includes(t);
+const isNum=t=>t==='rating'||t==='nps';
+const Q=(id,t,ty='rating',o={})=>({id,t,ty,req:1,note:ty==='rating'?1:0,...o});
+const SEC=(id,kind,title,sub,icon,qs)=>({id,kind,title,sub,icon,qs});
+const R=(p,a)=>a.map((t,i)=>Q(p+'_'+(i+1),t));
+function DEF(){return{v:2,
+meta:{title:'استبيان قياس رضا العملاء',sub:'دراسة تقييم الخدمات التجارية',
+ intro:'نحرص على تطوير جودة خدماتنا التجارية والارتقاء بتجربة عملائنا. تساعدنا مشاركتكم على تحسين سرعة الإنجاز، ودقة التنفيذ، ووضوح الإجراءات، ومستوى التواصل والمتابعة.',
+ s1:'بيانات العميل والخدمات المستخدمة',s2:'تقييم جودة الخدمات المستخدمة',s3:'التقييم العام ومقترحات التحسين',
+ thanksT:'تم استلام تقييمكم بنجاح',thanks:'نتقدم بخالص الشكر والتقدير لتعاونكم. مدخلاتكم ركيزة أساسية في تطوير منظومة خدماتنا التجارية.',
+ logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDlhKasHz9jFCHkCUTi96p2JHYxRFkShnlRfPHckLBxWKjsYHnwEpGw3Ij&s=10',logo2:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsFg-KSNPUEAC6JediLALioI1gW4IO83MRikrmf9ZXnvgukItN1ab-aRk&s=10',brandAr:'بنك الكريمي الإسلامي',brandEn:'AlKuraimi Islamic Bank',tag:'Corporate & Investment Banking',badge:'استبيان تجربة العميل',web:'www.kibanks.com',
+ foot:'لا يتضمن هذا الاستبيان أي تقييم لأسعار الصرف أو العمولات، ويركز على جودة الخدمة وتجربة العميل.'},
+secs:[
+SEC('profile','profile','بيانات العميل','','fa-building',[
+ Q('company','اسم الشركة / المؤسسة','text',{req:0}),
+ Q('industry','القطاع التجاري الأساسي','dropdown',{opts:['تجارة عامة','استيراد وتصدير','صناعة','مقاولات','خدمات','أدوية ومستلزمات طبية','أغذية ومواد استهلاكية','طاقة ومشتقات نفطية','اتصالات وتقنية','منظمات ومؤسسات','أخرى']}),
+ Q('frequency','ما مدى تكرار استخدامكم للخدمات التجارية لدى البنك؟','dropdown',{opts:['بشكل مستمر','عدة مرات شهرياً','مرة شهرياً تقريباً','بصورة غير منتظمة / حسب الحاجة']})]),
+SEC('lc','service','الاعتمادات المستندية (L/Cs)','Letters of Credit','fa-file-invoice',R('lc',["وضوح المتطلبات والمستندات المطلوبة لفتح أو تعديل الاعتماد.","سرعة إصدار الاعتماد بعد استكمال المتطلبات اللازمة.","سرعة إنجاز التعديلات المطلوبة على الاعتماد.","دقة واحترافية البنك في فحص مستندات الاعتماد.","مستوى التواصل وإطلاعكم على مستجدات وحالة العملية.","سرعة معالجة الملاحظات أو المشكلات التي قد تظهر أثناء تنفيذ الاعتماد."])),
+SEC('swift','service','الحوالات الخارجية (Swift)','SWIFT Transfers','fa-exchange-alt',R('swift',["وضوح المتطلبات اللازمة لتنفيذ الحوالة الخارجية.","سرعة تنفيذ الحوالة بعد استكمال المتطلبات.","دقة تنفيذ بيانات وتعليمات الحوالة.","مستوى المتابعة وإطلاعكم على حالة الحوالة عند الحاجة.","سرعة استجابة فريق البنك للاستفسارات أو معالجة أي تأخير أو مشكلة تتعلق بالحوالة."])),
+SEC('lg','service','خطابات الضمان (L/Gs)','Letters of Guarantee','fa-shield-alt',R('lg',["وضوح المتطلبات اللازمة لإصدار خطاب الضمان.","سرعة إصدار خطاب الضمان بعد استكمال المتطلبات.","دقة إعداد خطاب الضمان وفقاً للطلب والتعليمات المعتمدة.","سرعة إنجاز عمليات التعديل أو التجديد.","مستوى التعاون والاستجابة للاستفسارات أو المتطلبات الخاصة بالعملية."])),
+SEC('collections','service','التحاصيل المستندية (Collections)','Documentary Collections','fa-folder-open',R('coll',["سرعة إشعاركم بوصول مستندات التحصيل.","دقة التعامل مع المستندات والتعليمات الخاصة بعملية التحصيل.","سرعة استكمال إجراءات تسليم أو معالجة المستندات.","مستوى التواصل وإطلاعكم على حالة عملية التحصيل.","سرعة معالجة أي ملاحظات أو مشكلات مرتبطة بالعملية."])),
+SEC('g1','general','تجربة التعامل مع فريق العمل','','fa-users',R('g',["سهولة ووضوح إجراءات الحصول على الخدمات التجارية.","سرعة استجابة الموظفين لاستفساراتكم وطلباتكم.","مهنية واحترافية فريق العمل في التعامل معكم.","وضوح المعلومات والتوجيهات المقدمة لكم.","مستوى متابعة البنك للعمليات حتى استكمالها.","قدرة فريق العمل على معالجة المشكلات والملاحظات.","مستوى التنسيق بين الجهات المختلفة داخل البنك عند تنفيذ خدمتكم.","مدى فهم فريق البنك لطبيعة أعمالكم واحتياجاتكم التجارية."])),
+SEC('g2','general','المشكلات ومقترحات التحسين','','fa-wrench',[
+ Q('had_issue','هل واجهتم خلال الفترة الماضية مشكلة أو تأخيراً في إحدى الخدمات التجارية؟','yesno'),
+ Q('issue_handling','كيف تقيمون طريقة تعامل البنك مع المشكلة أو التأخير؟','rating',{if:{q:'had_issue',v:'نعم'}}),
+ Q('improve','ما الجانب الذي ترون أنه يحتاج إلى أكبر قدر من التحسين؟','multi',{req:0,h:'يمكن اختيار أكثر من إجابة',opts:['سرعة إنجاز المعاملات','وضوح الإجراءات والمتطلبات','سرعة الرد على الاستفسارات','المتابعة أثناء تنفيذ العملية','معالجة المشكلات والتأخير','التنسيق بين الإدارات المعنية','سهولة الإجراءات','مستوى المعرفة والخبرة لدى الموظفين','توفير معلومات وتحديثات أفضل عن حالة العمليات','شبكة البنوك المراسلة وتغطية العمليات الدولية']}),
+ Q('positive','ما أكثر جانب إيجابي في تجربتكم مع الخدمات التجارية لدى البنك؟','paragraph',{req:0}),
+ Q('main_improvement','ما أهم أمر ترون أن البنك بحاجة إلى تحسينه في خدماته التجارية؟','paragraph',{req:0}),
+ Q('desired_service','هل توجد خدمة تجارية أو ميزة تقدمها بنوك أخرى وتتطلعون إلى توفيرها أو تطويرها لدينا؟','paragraph',{req:0})]),
+SEC('g3','general','التقييم الختامي','','fa-star',[
+ Q('overall','بشكل عام، ما مدى رضاكم عن جودة الخدمات التجارية؟','rating'),
+ Q('nps','بناءً على تجربتكم الشاملة، ما احتمالية توصيتكم بخدماتنا التجارية لشركاء أعمال آخرين؟','nps',{note:1}),
+ Q('contact_requested','هل ترغبون أن يتواصل معكم أحد ممثلي البنك لمناقشة ملاحظاتكم أو مقترحاتكم؟','yesno'),
+ Q('contact_name','اسم الشخص المسؤول','text',{req:0,if:{q:'contact_requested',v:'نعم'}}),
+ Q('contact_method','وسيلة التواصل المناسبة (هاتف أو بريد إلكتروني)','text',{req:0,if:{q:'contact_requested',v:'نعم'}})])
+]}}
+// أي إعدادات قديمة (بدون v:2) تُستبدل بالأسئلة الافتراضية
+/* ===== معالجة الشعارات داخل المتصفح: تمييز الرمز/الرمز+النص وإزالة الخلفية البيضاء ===== */
+const LD=(u,cors)=>new Promise((ok,no)=>{const i=new Image();if(cors)i.crossOrigin='anonymous';i.onload=()=>ok(i);i.onerror=no;i.src=u});
+async function getLogos(m){const L=[];
+ for(const u of [m.logo,m.logo2].filter(Boolean)){let im=null,cors=true;
+  try{im=await LD(u,true)}catch(e){try{im=await LD(u,false);cors=false}catch(e2){}}
+  if(im&&im.naturalWidth)L.push({u,im,cors,r:im.naturalWidth/im.naturalHeight})}
+ return L.sort((a,b)=>b.r-a.r)}
+function tint(o,ink){if(!o||!o.cors)return null;try{
+ const im=o.im,S=Math.max(1,Math.min(4,Math.ceil(700/im.naturalWidth))),c=document.createElement('canvas');
+ c.width=im.naturalWidth*S;c.height=im.naturalHeight*S;
+ const x=c.getContext('2d',{willReadFrequently:true});x.imageSmoothingQuality='high';x.drawImage(im,0,0,c.width,c.height);
+ const d=x.getImageData(0,0,c.width,c.height),p=d.data;
+ for(let i=0;i<p.length;i+=4){const r=p[i],g=p[i+1],b=p[i+2];const a=Math.min(1,(1-Math.min(r,g,b)/255)*1.12)*(p[i+3]/255);
+  if(a<.07){p[i+3]=0;continue}
+  if(g-b>35&&r>170){p[i]=242;p[i+1]=165;p[i+2]=41}else{p[i]=ink[0];p[i+1]=ink[1];p[i+2]=ink[2]}
+  p[i+3]=Math.round(a*255)}
+ x.putImageData(d,0,0);return c.toDataURL('image/png')}catch(e){return null}}
+const normCfg=c=>{const d=DEF();if(c&&c.v===2&&Array.isArray(c.secs)&&c.secs.length){c.meta={...d.meta,...(c.meta||{})};if(!c.meta.logo||c.meta.logo==='logo.png')c.meta.logo=d.meta.logo;if(!c.meta.logo2)c.meta.logo2=d.meta.logo2;return c}return d};
+
+</script>
+<script>
+let CFG,cur=0,steps=[];const PV=/[?&]preview=1/.test(location.search);
+const SEP='|';
+function qHTML(q){
+ const n='q__'+q.id,star=q.req?'<span class="text-red-500">*</span>':'',N=q.ty==='nps';
+ const lab=`<label class="form-label">${esc(q.t)} ${star}</label>${q.h?`<p class="text-xs font-bold -mt-2 mb-3 ${N?'text-white/70':'text-slate-500'}">${esc(q.h)}</p>`:''}`;
+ const note=q.note?`<textarea name="${n}_note" rows="2" class="form-input mt-4 text-sm resize-none ${N?'border-none':'bg-slate-50'}" placeholder="${N?'ما هو السبب الرئيسي لتقييمك؟ (اختياري)':'ملاحظاتكم حول هذا التقييم (اختياري)...'}"></textarea>`:'';
+ let b='';
+ if(isNum(q.ty)){
+  b=`<div class="rating-grid mt-3">${[1,2,3,4,5,6,7,8,9,10].map(v=>`<label class="rating-box"><input type="radio" name="${n}" value="${v}" class="hidden"><div>${v}</div></label>`).join('')}</div>
+  <div class="flex justify-between text-xs font-bold mt-2 px-2 ${N?'text-white/70':''}"><span class="${N?'':'text-red-500'}"><i class="fas fa-arrow-down text-[10px]"></i> ${N?'1 (مستبعد جداً)':'1 (أقل)'}</span><span class="${N?'':'text-green-600'}">${N?'10 (بالتأكيد)':'10 (أعلى)'} <i class="fas fa-arrow-up text-[10px]"></i></span></div>`+note;
+ }else if(q.ty==='single'||q.ty==='yesno'||q.ty==='multi'){
+  const o=q.ty==='yesno'?['نعم','لا']:(q.opts||[]),t=q.ty==='multi'?'checkbox':'radio';
+  b=`<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">${o.map(v=>`<label class="formal-choice"><input type="${t}" name="${n}" value="${esc(v)}"><span class="formal-choice-text">${esc(v)}</span></label>`).join('')}</div>`;
+ }else if(q.ty==='dropdown'){
+  b=`<select name="${n}" class="form-input"><option value="">اختر...</option>${(q.opts||[]).map(v=>`<option>${esc(v)}</option>`).join('')}</select>`;
+ }else if(q.ty==='text')b=`<input type="text" name="${n}" class="form-input" placeholder="اكتب إجابتك هنا...">`;
+ else b=`<textarea name="${n}" rows="3" class="form-input resize-none bg-slate-50" placeholder="اكتب إجابتك هنا..."></textarea>`;
+ const cond=q.if?` data-if="${esc(q.if.q)}" data-ifv="${esc(q.if.v)}"`:'';
+ return `<div class="rq ${N?'nps-box':''} ${q.if?'hidden':''}" data-q="${esc(q.id)}" data-req="${q.req?1:0}" data-ty="${q.ty}"${cond}>${lab}${b}</div>`}
+const secHead=s=>s.title?`<h4 class="font-black text-lg text-[var(--primary)] mb-6 flex items-center gap-2"><i class="fas ${s.icon||'fa-folder'} text-[var(--secondary)]"></i> ${esc(s.title)}</h4>`:'';
+
+function build(){
+ const m=CFG.meta,S=k=>CFG.secs.filter(s=>s.kind===k);
+ document.title=m.title;$('hT').textContent=m.title;$('intro').textContent=m.intro||'';
+ $('bBadge').textContent=m.badge||m.sub||'';$('fBr').textContent=m.brandAr||'';$('fTag').textContent=m.tag||'';$('fWeb').textContent=m.web||'';
+ 
+ $('h1').textContent=m.s1;$('h2').textContent=m.s2;$('h3').textContent=m.s3;$('foot').textContent=m.foot||'';$('thT').textContent=m.thanksT;$('thB').textContent=m.thanks;
+ $('p1').innerHTML=S('profile').flatMap(s=>s.qs).map(qHTML).join('');
+ $('svcList').innerHTML=S('service').map(s=>`<label class="formal-choice"><input type="checkbox" name="services" value="${esc(s.id)}" onchange="blocks()"><span class="formal-choice-text">${esc(s.title)}${s.sub?`<br><span class="text-xs text-slate-400 font-semibold" dir="ltr">${esc(s.sub)}</span>`:''}</span></label>`).join('');
+ $('secs').innerHTML=S('service').map(s=>`<div class="hidden border-2 border-slate-100 p-6 rounded-xl bg-white shadow-sm" id="b_${s.id}">${secHead(s)}${s.qs.map(qHTML).join('')}</div>`).join('');
+ $('p3').innerHTML=S('general').map(s=>`<div>${secHead(s)}${s.qs.map(qHTML).join('')}</div>`).join('');
+ steps=[$('s1'),$('s2'),$('s3')];
+ $('f').addEventListener('change',cond);
+}
+const sel=()=>[...document.querySelectorAll('[name=services]:checked')].map(e=>e.value);
+function blocks(){const on=sel();CFG.secs.filter(s=>s.kind==='service').forEach(s=>$('b_'+s.id).classList.toggle('hidden',!on.includes(s.id)))}
+function cond(){document.querySelectorAll('[data-if]').forEach(w=>{
+ const src=document.querySelector(`[data-q="${w.dataset.if}"]`);const v=[];
+ if(src&&!src.closest('.hidden')){src.querySelectorAll('input:checked').forEach(e=>v.push(e.value));const s=src.querySelector('select');if(s&&s.value)v.push(s.value)}
+ w.classList.toggle('hidden',!v.includes(w.dataset.ifv))})}
+function show(n){cur=n;steps.forEach((s,i)=>s.classList.toggle('active',i===n));
+ const p=Math.round((n+1)/steps.length*100);$('pBar').style.width=p+'%';$('pTxt').textContent=p+'%';$('pStage').textContent='المرحلة '+(n+1)+' من 3';
+ $('nav').style.display='flex';$('prev').style.display=n?'inline-block':'none';
+ $('next').style.display=n<2?'inline-block':'none';$('send').style.display=n===2?'inline-block':'none';scrollTo({top:0,behavior:'smooth'})}
+function toast(m){$('toastMsg').textContent=m;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),4500)}
+function answered(w){const ty=w.dataset.ty;
+ if(['rating','nps','single','yesno','multi'].includes(ty))return!!w.querySelector('input:checked');
+ const e=w.querySelector('select,input[type=text],textarea:not([name$="_note"])');return!!(e&&e.value.trim())}
+function valid(){
+ const s=steps[cur];let bad=null;document.querySelectorAll('.err').forEach(e=>e.classList.remove('err'));
+ const mark=e=>{e.classList.add('err');bad=bad||e};
+ if(cur===0&&!sel().length)mark($('svc'));
+ s.querySelectorAll('.rq[data-req="1"]').forEach(w=>{if(!w.closest('.hidden')&&!answered(w))mark(w)});
+ if(bad){toast('يرجى استكمال الحقول والتقييمات الإلزامية قبل المتابعة.');bad.scrollIntoView({behavior:'smooth',block:'center'});return false}return true}
+function go(d){if(d>0&&!valid())return;show(cur+d)}
+function collect(){
+ const p={},g={};
+ for(const e of $('f').elements){
+  if(!e.name||e.closest('.hidden'))continue;
+  if(e.type==='radio'&&!e.checked)continue;
+  if(e.type==='checkbox'){if(e.checked)(g[e.name]=g[e.name]||[]).push(e.value);continue}
+  if(e.value.trim())p[e.name]=e.value.trim()}
+ for(const k in g)p[k]=g[k].join(SEP);
+ const snap={};CFG.secs.forEach(s=>s.qs.forEach(q=>{if(p['q__'+q.id]!==undefined)snap[q.id]={s:s.title,t:q.t,y:q.ty}}));
+ p.snap=JSON.stringify(snap);p.submitted_at=new Date().toISOString();return p}
+async function submitSurvey(){
+ if(!valid())return;
+ if(PV){toast('وضع المعاينة: لا يتم إرسال أي رد');return}
+ const b=$('send');b.innerHTML='<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';b.disabled=true;
+ try{await fetch(API,{method:'POST',mode:'no-cors',body:new URLSearchParams(collect())});
+  $('surveyContainer').classList.add('hidden');$('thanks').classList.remove('hidden');scrollTo({top:0,behavior:'smooth'});
+ }catch(e){toast('حدث خطأ أثناء الإرسال. تأكد من اتصالك بالإنترنت وحاول مجدداً.');b.innerHTML='<i class="fas fa-paper-plane"></i> اعتماد وإرسال التقييم';b.disabled=false}}
+
+async function brand(){
+ const L=await getLogos(CFG.meta);if(!L.length)return;
+ const lock=L[0].r>1.5?L[0]:null,sym=L.length>1?L[L.length-1]:(L[0].r<=1.5?L[0]:null);
+ const set=(id,o,ink,cls)=>{if(!o)return;const e=$(id),t=tint(o,ink);if(t)e.src=t;else{e.src=o.u;e.classList.add(cls)}e.classList.remove('hidden')};
+ set('logoImg',lock,[255,255,255],'inv');set('logoWm',sym,[255,255,255],'inv');set('logoFt',sym,[122,33,40],'mul');
+ const t=tint(sym||lock,[122,33,40]);if(t){let l=document.querySelector('link[rel=icon]');if(!l){l=document.createElement('link');l.rel='icon';document.head.appendChild(l)}l.href=t}}
+(async()=>{let c=null;
+ try{const ac=new AbortController();setTimeout(()=>ac.abort(),8000);c=await (await fetch(API+'?action=getConfig&t='+Date.now(),{signal:ac.signal})).json()}catch(e){}
+ if(PV){$('pvBar').classList.remove('hidden');try{c=JSON.parse(localStorage.kibDraft)}catch(e){}}
+ CFG=normCfg(c);build();$('loading').remove();show(0);brand()})();
+</script></body></html>
