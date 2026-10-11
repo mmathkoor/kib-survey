@@ -226,7 +226,7 @@ function go(d){if(d>0&&!valid())return;show(cur+d)}
 function collect(){
  const p={},g={};
  for(const e of $('f').elements){
-  if(!e.name||e.closest('.hidden'))continue;
+  if(!e.name||e.parentElement.closest('.hidden'))continue;
   if(e.type==='radio'&&!e.checked)continue;
   if(e.type==='checkbox'){if(e.checked)(g[e.name]=g[e.name]||[]).push(e.value);continue}
   if(e.value.trim())p[e.name]=e.value.trim()}
